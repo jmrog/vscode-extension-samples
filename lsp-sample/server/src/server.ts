@@ -14,7 +14,8 @@ import {
 	CompletionItemKind,
 	TextDocumentPositionParams,
 	TextDocumentSyncKind,
-	InitializeResult
+	InitializeResult,
+	MarkupKind
 } from 'vscode-languageserver/node';
 
 import {
@@ -55,7 +56,8 @@ connection.onInitialize((params: InitializeParams) => {
 			// Tell the client that this server supports code completion.
 			completionProvider: {
 				resolveProvider: true
-			}
+			},
+			hoverProvider: true,
 		}
 	};
 	if (hasWorkspaceFolderCapability) {
@@ -221,6 +223,15 @@ connection.onCompletionResolve(
 		return item;
 	}
 );
+
+connection.onHover(() => {
+	return {
+		contents: {
+			kind: MarkupKind.PlainText,
+			value: 'foo'
+		}
+	};
+});
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
