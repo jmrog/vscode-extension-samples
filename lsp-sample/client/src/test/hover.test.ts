@@ -17,11 +17,14 @@ async function testHover(
 	await activate(docUri);
 
 	// Executing the command `vscode.executeHoverProvider` to simulate triggering hover
-	const actualCompletionList = (await vscode.commands.executeCommand(
+	const actualHoverHelp = (await vscode.commands.executeCommand(
 		'vscode.executeHoverProvider',
 		docUri,
 		position
 	)) as vscode.Hover[];
 
-	assert.equal(actualCompletionList[0].contents, 'foo');
+	const { contents } = actualHoverHelp[0];
+	assert.equal(
+		typeof contents[0] === 'string' ? contents[0] : contents[0].value, 'foo'
+	);
 }
